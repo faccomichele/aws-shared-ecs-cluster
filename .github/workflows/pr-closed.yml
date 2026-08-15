@@ -1,3 +1,7 @@
+# This triggers on all clodes PRs
+
+name: Pull Request - Close All In-Progress Workflows
+
 on:
   pull_request:
     types: [closed]
