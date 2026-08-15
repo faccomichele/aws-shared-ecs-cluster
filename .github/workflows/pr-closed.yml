@@ -9,4 +9,4 @@ permissions:
 jobs:
   main:
     name: "Cancel on PR Close"
-    uses: faccomichele-org/gha-reusables/.github/workflows/cancel-on-pr-close.yml@main
+    uses: faccomichele/gha-reusables/.github/workflows/cancel-on-pr-close.yml@main
