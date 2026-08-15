@@ -1,5 +1,5 @@
 resource "aws_ecs_cluster" "this" {
-  name = "${local.project_name}"
+  name = "${local.project_name}-${local.environment}"
 
   setting {
     name  = "containerInsights"
@@ -25,7 +25,7 @@ resource "aws_ecs_cluster_capacity_providers" "this" {
 }
 
 resource "aws_cloudwatch_log_group" "this" {
-  name              = "/ecs/${local.project_name}"
+  name              = "/ecs/${local.project_name}-${local.environment}"
   retention_in_days = local.log_retention_days
 
   tags = merge(local.tags,
