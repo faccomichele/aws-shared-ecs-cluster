@@ -1,0 +1,41 @@
+# This triggers on all merged PRs into main
+
+name: Main - Deploy
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      local-only:
+        description: 'Run only on local environment'
+        type: boolean
+        required: true
+        default: true
+
+permissions:
+  id-token: write
+  pull-requests: write
+  contents: read
+
+concurrency:
+  group: pr-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+  
+jobs:
+  dev:
+    if: ${{ github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true) }}
+    name: "[DEV - ${{ matrix.environment_prefix }}]"
+    strategy:
+      matrix:
+        environment_prefix: ${{ fromJSON(github.event_name == 'workflow_dispatch' && inputs['local-only'] == true && '["local"]' || vars['ENVIRONMENT_PREFIXES_JSON'] || '[""]') }}
+    uses: faccomichele/gha-reusables/.github/workflows/terraform-run.yml@main
+    with:
+      environment: 'dev'
+      region: 'us-east-1'
+      global: true
+      working-directory: '.'
+      environment-prefix: ${{ matrix.environment_prefix }}
+      action: 'apply'
+    secrets: inherit
