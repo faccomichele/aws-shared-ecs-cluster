@@ -1,0 +1,12 @@
+on:
+  pull_request:
+    types: [closed]
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  main:
+    name: "Cancel on PR Close"
+    uses: faccomichele-org/gha-reusables/.github/workflows/cancel-on-pr-close.yml@main
